@@ -25,6 +25,10 @@ app.use(
 // app.use(passport.initialize());
 // app.use(passport.session());
 
+app.get("/", (req: any, res: any) => {
+  res.send("<h1>Home page...Congrats<h1/>");
+});
+
 // routes
 app.use(routes);
 
