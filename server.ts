@@ -28,19 +28,4 @@ app.use(
 // routes
 app.use(routes);
 
-///////
-
-app.get("/signup", (req: any, res: any) => {
-  res.send("<h1>Signup Page</h1>");
-});
-app.get("/login", (req: any, res: any) => {
-  res.send("<h1>Login Page</h1>");
-});
-
-app.get("/", (req: any, res: any) => {
-  res.send("<h1>Home Page</h1>");
-  console.log(req.cookies);
-});
-
-///////
 module.exports = app;
