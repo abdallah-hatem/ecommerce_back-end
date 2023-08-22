@@ -6,3 +6,4 @@ const userRoutes = require("../domains/user");
 router.use(userRoutes);
 
 module.exports = router;
+export {};
