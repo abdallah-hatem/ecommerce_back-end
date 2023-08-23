@@ -79,7 +79,7 @@ async function login(req: any, res: any) {
 
     res.cookie("jwt", token, {
       httpOnly: true,
-      maxAge: maxAge * 1000, // 3hrs in ms
+      maxAge: maxAge * 1000*1000000, // 3hrs in ms
     });
 
     res.status(200).json({ message: "Login successful", user: id });

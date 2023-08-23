@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 export default function checkAuth(req: any, res: any, next: any) {
   const token = req.cookies.jwt;
+  console.log(token)
 
   function cb(err: any, decodedToken: any) {
     if (err) {
