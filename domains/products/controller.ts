@@ -19,33 +19,33 @@ async function getAllProducts(req: any, res: any) {
   }
 }
 
-// Create a user
-async function signUp(req: any, res: any) {
+// Create a product
+async function createProduct(req: any, res: any) {
   try {
-    const { name, email, password } = req.body;
+    const { name, desc, category } = req.body;
 
-    // find if email already exists
-    const user = await isUserRegistered(email);
-    if (user) {
-      return res.status(409).json({ message: "User already exists" });
-    }
+    // find if product already exists
+    // const user = await isUserRegistered(email);
+    // if (user) {
+    //   return res.status(409).json({ message: "User already exists" });
+    // }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser: User = await prisma.user.create({
-      data: { name, email, password: hashedPassword },
+    const newProduct: User = await prisma.user.create({
+      data: { name, desc, category },
     });
 
-    if (!newUser) {
+    if (!newProduct) {
       return res
         .status(401)
-        .json({ message: "User not successful created database ERROR!" });
+        .json({ message: "Product not successful created database ERROR!" });
     }
 
-    res.status(201).json({ message: "succefully added", data: newUser });
+    res
+      .status(201)
+      .json({ message: "Product succefully added", data: newProduct });
   } catch (error) {
     res.status(401).json({
-      message: "User not successful created",
+      message: "Product not successful created",
       error,
     });
     console.log(error);
@@ -144,7 +144,7 @@ async function getCookie(req: any, res: any) {
 
 module.exports = {
   getAllProducts,
-  signUp,
+  createProduct,
   login,
   deleteUser,
   getUserById,

@@ -148,5 +148,5 @@ module.exports = {
   login,
   deleteUser,
   getUserById,
-  getCookie
+  getCookie,
 };
