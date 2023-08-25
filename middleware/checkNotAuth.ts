@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 export default function checkNotAuth(req: any, res: any, next: any) {
-  const token = req.cookies.jwt;
+  const token = req.session.jwt;
   if (!token) {
     return next();
   }
-  res.redirect("/");
+  return res.status(401).json({ message: "Already logged in" });
 }

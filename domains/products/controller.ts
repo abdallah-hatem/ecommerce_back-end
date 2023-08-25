@@ -4,16 +4,16 @@ const bcrypt = require("bcrypt");
 const { prisma } = require("../../config/prisma");
 const jwt = require("jsonwebtoken");
 
-// Get Users
-async function getAllUsers(req: any, res: any) {
+// Get Products
+async function getAllProducts(req: any, res: any) {
   try {
-    const users = await prisma.user.findMany({});
+    const products = await prisma.product.findMany({});
 
-    if (!users) {
-      return res.status(404).json({ message: "NO users found!" });
+    if (!products) {
+      return res.status(404).json({ message: "NO products found!" });
     }
 
-    res.status(200).json({ users });
+    res.status(200).json({ products });
   } catch (error) {
     res.send({ message: error });
   }
@@ -143,10 +143,10 @@ async function getCookie(req: any, res: any) {
 }
 
 module.exports = {
-  getAllUsers,
+  getAllProducts,
   signUp,
   login,
   deleteUser,
   getUserById,
-  getCookie
+  getCookie,
 };

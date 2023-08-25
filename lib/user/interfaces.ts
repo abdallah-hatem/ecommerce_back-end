@@ -3,3 +3,7 @@ export default interface User {
   email: string;
   password: string;
 }
+// export default interface Product {
+//   name: String;
+//   desc: String;
+// }
