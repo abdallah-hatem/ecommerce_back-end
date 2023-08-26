@@ -12,7 +12,7 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/"
-        : "https://ecommerce-back-end-24dd.vercel.app/",
+        : "http://localhost:3000/",
     sameSite: "none",
     credentials: true,
     secure: false,
