@@ -79,7 +79,7 @@ async function login(req: any, res: any) {
 
     req.session.jwt = token;
 
-    res.status(200).json({ message: "Login successful", user: id });
+    res.status(200).json({ message: "Login successful", userId: id });
   } catch (error) {
     res.status(400).json({
       message: "An error occurred",
@@ -111,6 +111,7 @@ async function deleteUser(req: any, res: any) {
   }
 }
 
+// Get user by id
 async function getUserById(req: any, res: any) {
   const id = req.params.id;
 
@@ -132,6 +133,7 @@ async function getUserById(req: any, res: any) {
   }
 }
 
+// Get cookie
 async function getCookie(req: any, res: any) {
   try {
     const cookie = req.session.jwt;
