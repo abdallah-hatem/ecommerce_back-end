@@ -31,12 +31,6 @@ app.use(
     secure: false,
   })
 );
-app.use((req: any, res: any, next: any) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  // res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
 app.set("trust proxy", 1);
 
 // routes
