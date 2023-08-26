@@ -9,10 +9,10 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "developement"
-        ? "*"
-        : "*",
+    origin: [
+      "https://ecommerce-back-end-24dd.vercel.app/",
+      "http://localhost:3000/",
+    ],
     sameSite: "none",
     credentials: true,
     secure: false,
