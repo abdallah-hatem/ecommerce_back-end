@@ -9,10 +9,10 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://ecommerce-back-end-24dd.vercel.app/",
-      "http://localhost:3000/",
-    ],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://ecommerce-back-end-24dd.vercel.app/"
+        : "https://ecommerce-back-end-24dd.vercel.app/",
     sameSite: "none",
     credentials: true,
     secure: false,
@@ -31,20 +31,6 @@ app.use(
     secure: false,
   })
 );
-app.use((req: any, res: any, next: any) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://ecommerce-back-end-24dd.vercel.app/"
-  );
-  // res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
 app.set("trust proxy", 1);
 
 // routes
