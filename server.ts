@@ -11,8 +11,8 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === "developement"
-        ? "https://ecommerce-back-end-24dd.vercel.app/"
-        : "https://ecommerce-back-end-24dd.vercel.app/",
+        ? "*"
+        : "*",
     sameSite: "none",
     credentials: true,
     secure: false,
