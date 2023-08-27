@@ -1,8 +1,13 @@
-import User from "../../lib/user/interfaces";
 const { isUserRegistered } = require("../../lib/user/isUserRegistered");
 const bcrypt = require("bcrypt");
 const { prisma } = require("../../config/prisma");
 const jwt = require("jsonwebtoken");
+
+interface User {
+  name: string;
+  email: string;
+  password: string;
+}
 
 // Get Users
 async function getAllUsers(req: any, res: any) {
@@ -159,3 +164,5 @@ module.exports = {
   getUserById,
   getCookie,
 };
+
+export {};

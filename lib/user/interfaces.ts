@@ -1,9 +1,10 @@
-export default interface User {
+export interface User {
   name: string;
   email: string;
   password: string;
 }
-// export default interface Product {
-//   name: String;
-//   desc: String;
-// }
+export interface Product {
+  name: String;
+  desc: String;
+  categoryId: number;
+}
