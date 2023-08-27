@@ -83,6 +83,7 @@ async function login(req: any, res: any) {
       httpOnly: false,
       sameSite: "none",
       secure: "true",
+      credentials: true,
     });
 
     res.status(200).json({ message: "Login successful", userId: id });
