@@ -11,8 +11,8 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/"
-        : "http://localhost:3000/",
+        ? "http://localhost:3000"
+        : "http://localhost:3000",
     sameSite: "none",
     credentials: true,
     secure: false,
@@ -32,6 +32,13 @@ app.use(
   })
 );
 app.set("trust proxy", 1);
+
+app.use((req: any, res: any, next: any) => {
+  res.setHeader("Access-Control-Allow-Origin: http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Credentials: true");
+  res.setHeader("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers: Content-Type, *");
+});
 
 // routes
 app.use(routes);
