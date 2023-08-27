@@ -77,7 +77,13 @@ async function login(req: any, res: any) {
       expiresIn: maxAge,
     });
 
-    req.session.jwt = token;
+    // req.session.jwt = token;
+    res.cookie("jwt", token, {
+      expires: new Date(Date.now() + 3600 * 1000 * 24 * 180 * 1),
+      httpOnly: false,
+      sameSite: "none",
+      secure: "true",
+    });
 
     res.status(200).json({ message: "Login successful", userId: id });
   } catch (error) {
