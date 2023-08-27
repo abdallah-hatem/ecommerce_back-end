@@ -32,6 +32,16 @@ app.use(express.urlencoded({ extended: true }));
 //   })
 // );
 
+app.use(function (req: any, res: any, next: any) {
+  // Website you wish to allow to connect
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://frontend-for-testing-backend.vercel.app"
+  );
+
+  next();
+});
+
 // routes
 app.use(routes);
 
