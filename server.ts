@@ -15,7 +15,7 @@ app.use(
         : "https://frontend-for-testing-backend.vercel.app",
     sameSite: "none",
     credentials: true,
-    secure: process.env.NODE_ENV === "development" ? false : true,
+    secure: true,
   })
 );
 app.use(cookieParser());
@@ -28,10 +28,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     sameSite: "none",
-    secure: process.env.NODE_ENV === "development" ? false : true,
+    secure: true,
   })
 );
-app.set("trust proxy", 1);
 
 // routes
 app.use(routes);
