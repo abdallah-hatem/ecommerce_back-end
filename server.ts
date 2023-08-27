@@ -15,7 +15,7 @@ app.use(
         : "https://frontend-for-testing-backend.vercel.app",
     sameSite: "none",
     credentials: true,
-    secure: false,
+    secure: process.env.NODE_ENV === "development" ? false : true,
   })
 );
 app.use(cookieParser());
