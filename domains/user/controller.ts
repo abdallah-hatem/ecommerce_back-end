@@ -84,7 +84,6 @@ async function login(req: any, res: any) {
       sameSite: "none",
       secure: true,
       credentials: true,
-      origin: "https://frontend-for-testing-backend.vercel.app",
     });
 
     res.status(200).json({ message: "Login successful", userId: id });
@@ -144,7 +143,7 @@ async function getUserById(req: any, res: any) {
 // Get cookie
 async function getCookie(req: any, res: any) {
   try {
-    const cookie = req.session.jwt;
+    const cookie = req.cookies.jwt;
 
     res.status(200).json({ message: "cookie sent successfully", cookie });
   } catch (error) {
