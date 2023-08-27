@@ -28,7 +28,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     sameSite: "none",
-    secure: false,
+    secure: process.env.NODE_ENV === "development" ? false : true,
   })
 );
 app.set("trust proxy", 1);
