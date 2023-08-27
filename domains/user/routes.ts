@@ -14,8 +14,8 @@ const {
 
 const router = express.Router();
 
-router.route("/login").post(checkNotAuth, login);
-router.route("/signup").post(checkNotAuth, signUp);
+router.route("/login").post(login);
+router.route("/signup").post(signUp);
 router.route("/user/:id").delete(deleteUser);
 router.route("/user").get(getAllUsers);
 router.route("/cookie").get(getCookie);
