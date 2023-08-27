@@ -82,7 +82,7 @@ async function login(req: any, res: any) {
       expires: new Date(Date.now() + 3600 * 1000 * 24 * 180 * 1),
       httpOnly: false,
       sameSite: "none",
-      secure: "true",
+      secure: true,
       credentials: true,
     });
 
