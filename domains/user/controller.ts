@@ -84,6 +84,7 @@ async function login(req: any, res: any) {
       sameSite: "none",
       secure: true,
       credentials: true,
+      origin: "https://frontend-for-testing-backend.vercel.app",
     });
 
     res.status(200).json({ message: "Login successful", userId: id });
