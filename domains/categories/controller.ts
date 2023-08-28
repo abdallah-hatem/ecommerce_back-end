@@ -44,8 +44,54 @@ async function createCategory(req: any, res: any) {
   }
 }
 
+// Delete Category
+async function deleteCategory(req: any, res: any) {
+  try {
+    const id = Number(req.params.id);
+
+    const category = await prisma.category.delete({ where: { id } });
+
+    if (!category) {
+      return res
+        .status(404)
+        .json({ message: "Category not deleted, database ERROR!" });
+    }
+
+    res.status(200).json({ message: "Category succefully deleted" });
+  } catch (error) {
+    res.send({ message: error });
+    console.log(error);
+  }
+}
+
+// Update Category
+async function updateCategory(req: any, res: any) {
+  try {
+    const id = Number(req.params.id);
+    const body = req.body;
+
+    const UpdatedCategory = await prisma.category.update({
+      where: { id },
+      data: body,
+    });
+
+    if (!UpdatedCategory) {
+      return res
+        .status(404)
+        .json({ message: "Category not deleted, database ERROR!" });
+    }
+
+    res.status(200).json({ message: "Category succefully deleted" });
+  } catch (error) {
+    res.send({ message: error });
+    console.log(error);
+  }
+}
+
 module.exports = {
   getAllCategories,
   createCategory,
+  deleteCategory,
+  updateCategory,
 };
 export {};

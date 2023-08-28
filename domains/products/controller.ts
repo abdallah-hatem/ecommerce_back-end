@@ -58,24 +58,46 @@ async function createProduct(req: any, res: any) {
   }
 }
 
-// Delete user
-async function deleteUser(req: any, res: any) {
-  const id = Number(req.params.id);
-
-  // NOT DONE YET:  check if logged in
-
+// Delete Category
+async function deleteProduct(req: any, res: any) {
   try {
-    const user = await prisma.user.delete({ where: { id } });
-    if (!user) {
-      return res.status(404).send({ message: `no user found with id: ${id}` });
+    const id = Number(req.params.id);
+
+    const product = await prisma.product.delete({ where: { id } });
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ message: "Product not deleted, database ERROR!" });
     }
 
-    res.status(200).json({ message: "User deleted successful", user });
+    res.status(200).json({ message: "Product succefully deleted" });
   } catch (error) {
-    res.status(400).json({
-      message: "An error occurred",
-      error,
+    res.send({ message: error });
+    console.log(error);
+  }
+}
+
+// Update Product
+async function updateProduct(req: any, res: any) {
+  try {
+    const id = Number(req.params.id);
+    const body = req.body;
+
+    const UpdatedProduct = await prisma.product.update({
+      where: { id },
+      data: body,
     });
+
+    if (!UpdatedProduct) {
+      return res
+        .status(404)
+        .json({ message: "Product not updated, database ERROR!" });
+    }
+
+    res.status(200).json({ message: "Product succefully updated" });
+  } catch (error) {
+    res.send({ message: error });
     console.log(error);
   }
 }
@@ -83,6 +105,7 @@ async function deleteUser(req: any, res: any) {
 module.exports = {
   getAllProducts,
   createProduct,
-  deleteUser,
+  deleteProduct,
+  updateProduct,
 };
 export {};
