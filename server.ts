@@ -5,6 +5,10 @@ const cookieParser = require("cookie-parser");
 const routes = require("./routes");
 require("dotenv").config();
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerFile = require("./swagger.json");
+
 const app = express();
 app.use(express.json());
 app.use(
@@ -21,16 +25,10 @@ app.use(
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-//     resave: false,
-//     saveUninitialized: false,
-//     sameSite: "none",
-//     secure: true,
-//   })
-// );
+
+const specs = swaggerJsdoc(swaggerFile);
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // routes
 app.use(routes);

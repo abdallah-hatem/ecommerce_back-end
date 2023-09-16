@@ -47,7 +47,7 @@ async function createProduct(req: any, res: any) {
     }
 
     res
-      .status(201)
+      .status(200)
       .json({ message: "Product succefully added", data: newProduct });
   } catch (error) {
     res.status(401).json({
@@ -58,7 +58,7 @@ async function createProduct(req: any, res: any) {
   }
 }
 
-// Delete Category
+// Delete Product
 async function deleteProduct(req: any, res: any) {
   try {
     const id = Number(req.params.id);

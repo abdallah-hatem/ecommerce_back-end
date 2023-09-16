@@ -21,6 +21,7 @@ async function getAllUsers(req: any, res: any) {
     res.status(200).json({ users });
   } catch (error) {
     res.send({ message: error });
+    console.log(error);
   }
 }
 
@@ -105,8 +106,6 @@ async function login(req: any, res: any) {
 async function deleteUser(req: any, res: any) {
   const id = Number(req.params.id);
 
-  // NOT DONE YET:  check if logged in
-
   try {
     const user = await prisma.user.delete({ where: { id } });
     if (!user) {
@@ -145,24 +144,12 @@ async function getUserById(req: any, res: any) {
   }
 }
 
-// Get cookie
-async function getCookie(req: any, res: any) {
-  try {
-    const cookie = req.cookies.jwt;
-
-    res.status(200).json({ message: "cookie sent successfully", cookie });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 module.exports = {
   getAllUsers,
   signUp,
   login,
   deleteUser,
   getUserById,
-  getCookie,
 };
 
 export {};

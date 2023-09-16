@@ -15,41 +15,41 @@ model User {
   email    String @unique
   password String
 
-  cart   Cart? @relation(fields: [cartId], references: [id])
-  cartId Int?
+  cartId Cart[]
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  desc      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  deletedAt DateTime @default(now())
+  id   Int    @id @default(autoincrement())
+  name String
+  desc String
+
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @default(now())
+  // deletedAt DateTime @default(now())
 
   Category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
-  Cart       Cart?     @relation(fields: [cartId], references: [id])
-  cartId     Int?
+
+  Cart Cart[]
 }
 
 model Category {
   id   Int    @id @default(autoincrement())
   name String
-  desc String
 
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  deletedAt DateTime  @default(now())
+  products Product[]
+
+  // createdAt DateTime  @default(now())
+  // updatedAt DateTime  @default(now())
+  // deletedAt DateTime  @default(now())
 }
 
 model Cart {
   id       Int       @id @default(autoincrement())
   products Product[]
-  quantity Int
+  User     User      @relation(fields: [userId], references: [id])
+  userId   Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  User      User[]
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @default(now())
 }

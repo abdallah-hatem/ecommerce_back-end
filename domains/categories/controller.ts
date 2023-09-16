@@ -6,10 +6,12 @@ interface Category {
   categoryId: number;
 }
 
-// Get Products
+// Get Categories
 async function getAllCategories(req: any, res: any) {
   try {
-    const categories = await prisma.category.findMany({});
+    const categories = await prisma.category.findMany({
+      // include: { products: true },
+    });
 
     if (!categories) {
       return res.status(404).json({ message: "NO categories found!" });
