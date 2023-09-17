@@ -16,7 +16,7 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
+        : "http://localhost:3000",
     sameSite: "none",
     credentials: true,
     secure: true,
@@ -24,6 +24,7 @@ app.use(
 );
 app.use(cookieParser());
 
+// : "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
 // : "https://ecommerce-back-rjhjlq84v-ahkortam2-gmailcom.vercel.app/",
 
 app.use(express.urlencoded({ extended: true }));
