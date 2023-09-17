@@ -12,7 +12,7 @@ interface User {
 // Get Users
 async function getAllUsers(req: any, res: any) {
   try {
-    const users = await prisma.user.findMany({});
+    const users = await prisma.user.findMany({ include: { cart: true } });
 
     if (!users) {
       return res.status(404).json({ message: "NO users found!" });
@@ -39,7 +39,12 @@ async function signUp(req: any, res: any) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser: User = await prisma.user.create({
-      data: { name, email, password: hashedPassword },
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        cart: { create: [{}] },
+      },
     });
 
     if (!newUser) {
@@ -51,7 +56,7 @@ async function signUp(req: any, res: any) {
     res.status(201).json({ message: "succefully added", data: newUser });
   } catch (error) {
     res.status(401).json({
-      message: "User not successful created",
+      message: "User not successfully created",
       error,
     });
     console.log(error);

@@ -5,9 +5,9 @@ generator client {
 datasource db {
   provider = "postgresql"
   // url      = env("DATABASE_URL") // local
-  // url      = env("AWS_RDS") // AWS
   url       = env("POSTGRES_PRISMA_URL") // vercel
   directUrl = env("POSTGRES_URL_NON_POOLING") // vercel 
+  // url      = env("AWS_RDS") // AWS
 }
 
 model User {
@@ -16,13 +16,15 @@ model User {
   email    String @unique
   password String
 
-  cartId Cart[]
+  cart Cart[]
 }
 
 model Product {
-  id   Int    @id @default(autoincrement())
-  name String
-  desc String
+  id       Int    @id @default(autoincrement())
+  name     String
+  price    Int
+  desc     String
+  quantity Int
 
   // createdAt DateTime @default(now())
   // updatedAt DateTime @default(now())

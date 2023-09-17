@@ -8,12 +8,18 @@ const {
   createProduct,
   deleteProduct,
   updateProduct,
+  getProductById,
 } = require("./controller");
 
 const router = express.Router();
 
 router.route("/product").get(getAllProducts).post(createProduct);
-router.route("/product/:id").delete(deleteProduct).put(updateProduct);
+
+router
+  .route("/product/:id")
+  .get(getProductById)
+  .delete(deleteProduct)
+  .put(updateProduct);
 
 module.exports = router;
 

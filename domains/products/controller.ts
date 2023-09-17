@@ -25,19 +25,40 @@ async function getAllProducts(req: any, res: any) {
   }
 }
 
+// Get Product by ID
+async function getProductById(req: any, res: any) {
+  try {
+    const productId = Number(req.params.id);
+
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "NO product found!" });
+    }
+
+    res.status(200).json({ product });
+  } catch (error) {
+    res.send({ error });
+    console.log(error);
+  }
+}
+
 // Create a product
 async function createProduct(req: any, res: any) {
   try {
-    const { name, desc, categoryId } = req.body;
+    const { name, price, desc, categoryId, quantity } = req.body;
 
-    // find if product already exists
-    // const user = await isUserRegistered(email);
-    // if (user) {
-    //   return res.status(409).json({ message: "User already exists" });
-    // }
+    if (price <= 0 || quantity <= 0) {
+      return res.status(401).json({
+        message:
+          "ERROR! price or quantity can not be smaller than or equal Zero",
+      });
+    }
 
     const newProduct: Product = await prisma.product.create({
-      data: { name, desc, categoryId },
+      data: { name, price, desc, categoryId, quantity },
     });
 
     if (!newProduct) {
@@ -107,5 +128,6 @@ module.exports = {
   createProduct,
   deleteProduct,
   updateProduct,
+  getProductById
 };
 export {};
