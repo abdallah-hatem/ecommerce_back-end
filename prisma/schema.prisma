@@ -4,9 +4,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL") // local
-  url       = env("POSTGRES_PRISMA_URL") // vercel
-  directUrl = env("POSTGRES_URL_NON_POOLING") // vercel 
+  url      = env("DATABASE_URL") // local
+  
+  // url       = env("POSTGRES_PRISMA_URL") // vercel
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // vercel 
   // url      = env("AWS_RDS") // AWS
 }
 

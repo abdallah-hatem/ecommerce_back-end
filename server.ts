@@ -15,8 +15,9 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === "development"
-        ? "https://frontend-for-testing-backend.vercel.app"
-        : "https://frontend-for-testing-backend.vercel.app",
+        ? "http://localhost:3000"
+        // : "https://frontend-for-testing-backend.vercel.app",
+        : "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app/",
     sameSite: "none",
     credentials: true,
     secure: true,
