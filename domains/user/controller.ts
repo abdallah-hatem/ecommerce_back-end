@@ -161,6 +161,17 @@ async function getCookie(req: any, res: any) {
   }
 }
 
+// Delete cookie
+async function deleteCookie(req: any, res: any) {
+  try {
+    res.clearCookie("jwt");
+
+    res.status(200).json({ message: "cookie deleted successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   getAllUsers,
   signUp,
@@ -168,6 +179,7 @@ module.exports = {
   deleteUser,
   getUserById,
   getCookie,
+  deleteCookie
 };
 
 export {};
