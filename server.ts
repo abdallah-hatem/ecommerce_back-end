@@ -16,17 +16,14 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        // : "https://frontend-for-testing-backend.vercel.app",
-        : "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
+        : "https://frontend-for-testing-backend.vercel.app",
+    // "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
     sameSite: "none",
     credentials: true,
     secure: true,
   })
 );
 app.use(cookieParser());
-
-// : "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
-// : "https://ecommerce-back-rjhjlq84v-ahkortam2-gmailcom.vercel.app/",
 
 app.use(express.urlencoded({ extended: true }));
 
