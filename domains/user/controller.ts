@@ -166,6 +166,7 @@ module.exports = {
   login,
   deleteUser,
   getUserById,
+  getCookie
 };
 
 export {};

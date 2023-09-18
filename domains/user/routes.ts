@@ -11,7 +11,7 @@
  *       properties:
  *         id:
  *           type: number
- *           description: The auto-generated id 
+ *           description: The auto-generated id
  *         name:
  *           type: string
  *           description: users name
@@ -21,7 +21,7 @@
  *         password:
  *           type: string
  *           description: password of email
- *     
+ *
  */
 /**
  * @swagger
@@ -88,6 +88,7 @@ const {
   login,
   deleteUser,
   getUserById,
+  getCookie,
 } = require("./controller");
 
 const router = express.Router();
@@ -95,7 +96,7 @@ const router = express.Router();
 router.route("/login").post(checkNotAuth, login);
 router.route("/signup").post(checkNotAuth, signUp);
 router.route("/user/:id").delete(deleteUser);
-router.route("/user").get(getAllUsers);
+router.route("/user").get(getAllUsers).get(getCookie);
 
 module.exports = router;
 
