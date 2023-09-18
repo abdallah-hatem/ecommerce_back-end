@@ -16,8 +16,8 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : "https://frontend-for-testing-backend.vercel.app",
-    // "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
+        : // : "https://frontend-for-testing-backend.vercel.app",
+          "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
     sameSite: "none",
     credentials: true,
     secure: true,
