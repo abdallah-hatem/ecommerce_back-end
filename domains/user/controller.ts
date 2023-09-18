@@ -153,6 +153,7 @@ async function getUserById(req: any, res: any) {
 async function getCookie(req: any, res: any) {
   try {
     const cookie = req.cookies.jwt;
+    console.log(cookie,"coookie")
 
     res.status(200).json({ message: "cookie sent successfully", cookie });
   } catch (error) {

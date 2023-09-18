@@ -97,6 +97,7 @@ router.route("/login").post(checkNotAuth, login);
 router.route("/signup").post(checkNotAuth, signUp);
 router.route("/user/:id").delete(deleteUser);
 router.route("/user").get(getAllUsers).get(getCookie);
+router.route("/cookie").get(getCookie);
 
 module.exports = router;
 
