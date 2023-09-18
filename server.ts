@@ -11,14 +11,23 @@ const swaggerFile = require("./swagger.json");
 
 const app = express();
 app.use(express.json());
+
+let whitelist = [
+  "http://localhost:3000",
+  "https://frontend-for-testing-backend.vercel.app",
+  "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
+];
+
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : "http://localhost:3000",
-    // : "https://frontend-for-testing-backend.vercel.app",
-    // "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
+    origin: function (origin: any, callback: any) {
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+
     sameSite: "none",
     credentials: true,
     secure: true,

@@ -82,7 +82,7 @@ async function login(req: any, res: any) {
 
     // create token
     const { id, name } = await user;
-    const maxAge = 3 * 60 * 60; // 3hrs
+    const maxAge = 60 * 60 * 24; // 24hrs
 
     const token = jwt.sign({ id, name }, process.env.TOKEN_SECRET, {
       expiresIn: maxAge,
@@ -90,7 +90,7 @@ async function login(req: any, res: any) {
 
     // req.session.jwt = token;
     res.cookie("jwt", token, {
-      expires: new Date(Date.now() + 3600 * 1000 * 24 * 180 * 1),
+      expires: new Date(Date.now() + maxAge * 10),
       httpOnly: false,
       sameSite: "none",
       secure: true,
@@ -153,7 +153,7 @@ async function getUserById(req: any, res: any) {
 async function getCookie(req: any, res: any) {
   try {
     const cookie = req.cookies.jwt;
-    console.log(cookie,"coookie")
+    console.log(cookie, "coookie");
 
     res.status(200).json({ message: "cookie sent successfully", cookie });
   } catch (error) {
@@ -167,7 +167,7 @@ module.exports = {
   login,
   deleteUser,
   getUserById,
-  getCookie
+  getCookie,
 };
 
 export {};
