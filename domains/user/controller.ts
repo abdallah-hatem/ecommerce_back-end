@@ -164,10 +164,10 @@ async function getCookie(req: any, res: any) {
 // Delete cookie
 async function deleteCookie(req: any, res: any) {
   try {
-    res.cookie("jwt", null, { expire: Date.now() });
     res.clearCookie("jwt");
 
     res.status(200).json({ message: "cookie deleted successfully" });
+    res.end();
   } catch (error) {
     console.log(error);
   }
