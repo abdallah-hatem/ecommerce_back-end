@@ -164,7 +164,13 @@ async function getCookie(req: any, res: any) {
 // Delete cookie
 async function deleteCookie(req: any, res: any) {
   try {
-    res.clearCookie("jwt");
+    // res.clearCookie("jwt");
+    res.clearCookie("jwt", {
+      httpOnly: false,
+      sameSite: "none",
+      secure: true,
+      credentials: true,
+    });
 
     res.status(200).json({ message: "cookie deleted successfully" });
     res.end();
