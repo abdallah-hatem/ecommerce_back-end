@@ -1,5 +1,3 @@
-import { getProductQty } from "../../lib/products/getProductQty";
-
 const { prisma } = require("../../config/prisma");
 const {
   isCartAlreadyAvailable,
@@ -52,8 +50,6 @@ async function getCartById(req: any, res: any) {
 // Add Cart
 async function createCart(req: any, res: any) {
   try {
-    // get user id from cookie ?
-
     const userId = Number(req.params.id);
 
     const { productId } = req.body;
@@ -92,11 +88,8 @@ async function createCart(req: any, res: any) {
 async function updateCart(req: any, res: any) {
   try {
     const cartId = Number(req.params.id);
-    // const cartId = Number(1);
 
     const { productId } = req.body;
-
-    const quantity = await getProductQty(productId);
 
     const newCart = await prisma.cart.update({
       where: { id: cartId },
@@ -115,7 +108,7 @@ async function updateCart(req: any, res: any) {
         .json({ message: "Cart not succefully created, database ERROR!" });
     }
 
-    res.status(200).json({ message: "Cart succefully added", data: newCart });
+    res.status(200).json({ message: "Cart succefully updated", data: newCart });
   } catch (error) {
     res.send({ message: error });
     console.log(error);
@@ -123,12 +116,15 @@ async function updateCart(req: any, res: any) {
 }
 
 // Delete Cart
-async function deleteCart(req: any, res: any) {
+async function emptyCart(req: any, res: any) {
   try {
     const cartId = Number(req.params.id);
 
-    const cart = await prisma.cart.delete({
+    const cart = await prisma.cart.update({
       where: { id: cartId },
+      data: {
+        products: { set: [] },
+      },
     });
 
     if (!cart) {
@@ -144,6 +140,12 @@ async function deleteCart(req: any, res: any) {
   }
 }
 
-module.exports = { getAllCarts, createCart, updateCart, deleteCart,getCartById };
+module.exports = {
+  getAllCarts,
+  createCart,
+  updateCart,
+  emptyCart,
+  getCartById,
+};
 
 export {};

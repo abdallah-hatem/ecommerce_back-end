@@ -4,10 +4,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL") // local
+  url      = env("DATABASE_URL") // local
 
-  url       = env("POSTGRES_PRISMA_URL") // vercel
-  directUrl = env("POSTGRES_URL_NON_POOLING") // vercel 
+  // url       = env("POSTGRES_PRISMA_URL") // vercel
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // vercel 
 
   // url      = env("AWS_RDS") // AWS
 }
@@ -28,10 +28,6 @@ model Product {
   desc     String
   quantity Int
 
-  // createdAt DateTime @default(now())
-  // updatedAt DateTime @default(now())
-  // deletedAt DateTime @default(now())
-
   Category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?
 
@@ -43,18 +39,11 @@ model Category {
   name String
 
   products Product[]
-
-  // createdAt DateTime  @default(now())
-  // updatedAt DateTime  @default(now())
-  // deletedAt DateTime  @default(now())
 }
 
 model Cart {
   id       Int       @id @default(autoincrement())
   products Product[]
-  User     User      @relation(fields: [userId], references: [id])
+  User     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
-
-  // createdAt DateTime @default(now())
-  // updatedAt DateTime @default(now())
 }

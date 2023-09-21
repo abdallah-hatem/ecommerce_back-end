@@ -73,7 +73,7 @@ async function login(req: any, res: any) {
       return res.status(404).send("Error user not found. Please Signup");
     }
 
-    // check if password is accurate
+    // validate password
     const validPass = await bcrypt.compare(password, user.password);
 
     if (!validPass) {
@@ -88,7 +88,6 @@ async function login(req: any, res: any) {
       expiresIn: maxAge,
     });
 
-    // req.session.jwt = token;
     res.cookie("jwt", token, {
       expires: new Date(Date.now() + maxAge * 10),
       httpOnly: false,
@@ -127,11 +126,33 @@ async function deleteUser(req: any, res: any) {
   }
 }
 
+// Update user
+async function updateUser(req: any, res: any) {
+  try {
+    const id = Number(req.params.id);
+    const body = req.body;
+
+    const updatedUser = await prisma.product.update({
+      where: { id },
+      data: body,
+    });
+
+    if (!updatedUser) {
+      return res
+        .status(400)
+        .json({ message: "User not updated, database ERROR!" });
+    }
+
+    res.status(200).json({ message: "User succefully updated" });
+  } catch (error) {
+    res.send({ message: error });
+    console.log(error);
+  }
+}
+
 // Get user by id
 async function getUserById(req: any, res: any) {
-  const id = req.params.id;
-
-  // NOT DONE YET:  check if logged in
+  const id = Number(req.params.id);
 
   try {
     const user = await prisma.user.findUnique({ where: { id } });
@@ -172,7 +193,7 @@ async function deleteCookie(req: any, res: any) {
       credentials: true,
     });
 
-    res.status(200).json({ message: "cookie deleted successfully" });
+    res.status(200).json({ message: "Logged out successfully" });
     res.end();
   } catch (error) {
     console.log(error);
@@ -187,6 +208,7 @@ module.exports = {
   getUserById,
   getCookie,
   deleteCookie,
+  updateUser,
 };
 
 export {};

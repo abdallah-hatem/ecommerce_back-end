@@ -21,6 +21,9 @@
  *         password:
  *           type: string
  *           description: password of email
+ *         cart:
+ *           type: array of objects
+ *           description: cart
  *
  */
 /**
@@ -59,7 +62,7 @@
  *               $ref: '#/components/schemas/Users'
  *       500:
  *         description: Some server error
- * /book/{id}:
+ * /user/{id}:
  *   delete:
  *     summary: Remove the user by id
  *     tags: [Users]
@@ -76,9 +79,81 @@
  *         description: The user was deleted
  *       404:
  *         description: The user was not found
+ *
+ *   put:
+ *     summary: Update the user by id
+ *     tags: [Users]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Users'
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Update user
+ *
+ *     responses:
+ *       200:
+ *         description: The user was updated successfully
+ *       400:
+ *         description: The user was not updated
+ *
+ * /signup:
+ *   post:
+ *     summary: Signup
+ *     tags: [Users]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Users'
+ *     responses:
+ *       200:
+ *         description: Siggned up successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Users'
+ *
+ * /login:
+ *   post:
+ *     summary: Login
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Users'
+ *     responses:
+ *       200:
+ *         description: Logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Users'
+ * /logout:
+ *   post:
+ *     summary: Logout
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ *
  */
 import checkAuth from "../../middleware/checkAuth";
 import checkNotAuth from "../../middleware/checkNotAuth";
+import checkAdmin from "../../middleware/checkAdmin";
 
 const express = require("express");
 
@@ -87,18 +162,25 @@ const {
   signUp,
   login,
   deleteUser,
-  getUserById,
-  getCookie,
   deleteCookie,
+  getUserById,
+  updateUser,
+  getCookie,
 } = require("./controller");
 
 const router = express.Router();
 
 router.route("/login").post(checkNotAuth, login);
 router.route("/signup").post(checkNotAuth, signUp);
-router.route("/user/:id").delete(deleteUser);
-router.route("/user").get(getAllUsers);
-router.route("/cookie").get(getCookie).delete(deleteCookie);
+router.route("/logout").post(checkAuth, deleteCookie);
+
+router
+  .route("/user/:id")
+  .get(checkAuth, checkAdmin, getUserById)
+  .put(checkAuth, checkAdmin, updateUser)
+  .delete(checkAuth, checkAdmin, deleteUser);
+
+router.route("/user").get(checkAuth, checkAdmin, getAllUsers);
 
 module.exports = router;
 

@@ -1,7 +1,4 @@
-const { isUserRegistered } = require("../../lib/user/isUserRegistered");
-const bcrypt = require("bcrypt");
 const { prisma } = require("../../config/prisma");
-const jwt = require("jsonwebtoken");
 
 interface Product {
   name: String;
@@ -25,6 +22,34 @@ async function getAllProducts(req: any, res: any) {
   }
 }
 
+// Get Paginated Products
+async function getPaginatedProducts(req: any, res: any) {
+  try {
+    const page = Number(req.params.id);
+    const items = 10;
+
+    function skips(page: number) {
+      if (page === 1) return 0;
+
+      return page * items;
+    }
+
+    const products = await prisma.product.findMany({
+      skip: skips(page),
+      take: items,
+    });
+
+    if (!products) {
+      return res.status(404).json({ message: "No products found!" });
+    }
+
+    res.status(200).json({ products });
+  } catch (error) {
+    res.send({ error });
+    console.log(error);
+  }
+}
+
 // Get Product by ID
 async function getProductById(req: any, res: any) {
   try {
@@ -39,6 +64,26 @@ async function getProductById(req: any, res: any) {
     }
 
     res.status(200).json({ product });
+  } catch (error) {
+    res.send({ error });
+    console.log(error);
+  }
+}
+
+// Get Product by category ID
+async function getProductsByCatId(req: any, res: any) {
+  try {
+    const categoryId = Number(req.params.id);
+
+    const products = await prisma.product.findMany({
+      where: { categoryId },
+    });
+
+    if (!products) {
+      return res.status(404).json({ message: "NO products found!" });
+    }
+
+    res.status(200).json({ products });
   } catch (error) {
     res.send({ error });
     console.log(error);
@@ -105,12 +150,12 @@ async function updateProduct(req: any, res: any) {
     const id = Number(req.params.id);
     const body = req.body;
 
-    const UpdatedProduct = await prisma.product.update({
+    const updatedProduct = await prisma.product.update({
       where: { id },
       data: body,
     });
 
-    if (!UpdatedProduct) {
+    if (!updatedProduct) {
       return res
         .status(404)
         .json({ message: "Product not updated, database ERROR!" });
@@ -128,6 +173,8 @@ module.exports = {
   createProduct,
   deleteProduct,
   updateProduct,
-  getProductById
+  getProductById,
+  getProductsByCatId,
+  getPaginatedProducts,
 };
 export {};
