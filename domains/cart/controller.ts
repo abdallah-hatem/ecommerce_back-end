@@ -2,6 +2,7 @@ const { prisma } = require("../../config/prisma");
 const {
   isCartAlreadyAvailable,
 } = require("../../lib/cart/isCartAlreadyAvailable");
+const { isProductFoundInCart } = require("../../lib/cart/isProductFoundInCart");
 
 interface Cart {
   name: String;
@@ -12,7 +13,7 @@ interface Cart {
 async function getAllCarts(req: any, res: any) {
   try {
     const carts = await prisma.cart.findMany({
-      include: { products: true },
+      include: { cartItem: true },
     });
 
     if (!carts) {
@@ -89,14 +90,55 @@ async function updateCart(req: any, res: any) {
   try {
     const cartId = Number(req.params.id);
 
-    const { productId } = req.body;
+    const { productId, quantity, cartItemId } = req.body;
+
+    const newProduct = await isProductFoundInCart(cartId, productId);
+    if (newProduct.length > 0) {
+      const totalQty = quantity + newProduct[0].quantity;
+
+      const newCartItem = await prisma.cartItem.update({
+        where: { id: cartItemId },
+        data: {
+          quantity: totalQty,
+        },
+      });
+
+      const newCart = await prisma.cart.update({
+        where: { id: cartId },
+        data: {
+          cartItem: {
+            connect: {
+              id: newCartItem.id,
+            },
+          },
+        },
+      });
+
+      if (!newCart) {
+        return res
+          .status(404)
+          .json({ message: "Cart not succefully created, database ERROR!" });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "Cart succefully updated", data: newCart });
+    }
+
+    const newCartItem = await prisma.cartItem.create({
+      data: {
+        cartId,
+        productId,
+        quantity,
+      },
+    });
 
     const newCart = await prisma.cart.update({
       where: { id: cartId },
       data: {
-        products: {
+        cartItem: {
           connect: {
-            id: productId,
+            id: newCartItem.id,
           },
         },
       },
@@ -108,7 +150,9 @@ async function updateCart(req: any, res: any) {
         .json({ message: "Cart not succefully created, database ERROR!" });
     }
 
-    res.status(200).json({ message: "Cart succefully updated", data: newCart });
+    res
+      .status(200)
+      .json({ message: "Cart succefully updated", data: "newCart" });
   } catch (error) {
     res.send({ message: error });
     console.log(error);
@@ -120,11 +164,8 @@ async function emptyCart(req: any, res: any) {
   try {
     const cartId = Number(req.params.id);
 
-    const cart = await prisma.cart.update({
-      where: { id: cartId },
-      data: {
-        products: { set: [] },
-      },
+    const cart = await prisma.cartItem.deleteMany({
+      where: { cartId },
     });
 
     if (!cart) {
