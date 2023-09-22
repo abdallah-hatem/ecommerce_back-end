@@ -3,6 +3,7 @@ const {
   isCartAlreadyAvailable,
 } = require("../../lib/cart/isCartAlreadyAvailable");
 const { isProductFoundInCart } = require("../../lib/cart/isProductFoundInCart");
+const { checkCartItem } = require("../../lib/cart/checkCartItem");
 
 interface Cart {
   name: String;
@@ -96,33 +97,40 @@ async function updateCart(req: any, res: any) {
     if (newProduct.length > 0) {
       const totalQty = quantity + newProduct[0].quantity;
 
-      const newCartItem = await prisma.cartItem.update({
-        where: { id: cartItemId },
-        data: {
-          quantity: totalQty,
-        },
-      });
+      // check if cartItemId and productId in the same cartItem
+      const check = await checkCartItem(cartItemId, productId);
+      if (check.length > 0) {
+        const newCartItem = await prisma.cartItem.update({
+          where: { id: cartItemId },
+          data: {
+            quantity: totalQty,
+          },
+        });
 
-      const newCart = await prisma.cart.update({
-        where: { id: cartId },
-        data: {
-          cartItem: {
-            connect: {
-              id: newCartItem.id,
+        const newCart = await prisma.cart.update({
+          where: { id: cartId },
+          data: {
+            cartItem: {
+              connect: {
+                id: newCartItem.id,
+              },
             },
           },
-        },
-      });
+        });
 
-      if (!newCart) {
+        if (!newCart) {
+          return res
+            .status(404)
+            .json({ message: "Cart not succefully created, database ERROR!" });
+        }
+
         return res
-          .status(404)
-          .json({ message: "Cart not succefully created, database ERROR!" });
+          .status(200)
+          .json({ message: "Cart succefully updated", data: newCart });
       }
-
       return res
-        .status(200)
-        .json({ message: "Cart succefully updated", data: newCart });
+        .status(404)
+        .json({ message: "Cart not succefully created, database ERROR!" });
     }
 
     const newCartItem = await prisma.cartItem.create({
