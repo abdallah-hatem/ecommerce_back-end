@@ -10,20 +10,20 @@ const {
   updateCart,
   emptyCart,
   getCartById,
+  addToCart,
 } = require("./controller");
 
 const router = express.Router();
 
-router
-  .route("/cart")
-  .get(checkAuth, checkAdmin, getAllCarts)
-  // .post(checkAuth, createCart);
+router.route("/cart").get(checkAuth, checkAdmin, getAllCarts);
+// .post(checkAuth, createCart);
 
 router
   .route("/cart/:id")
   .get(checkAuth, getCartById)
   .delete(checkAuth, emptyCart)
-  .put(checkAuth, updateCart)
+  // .put(checkAuth, updateCart)
+  .put(checkAuth, addToCart);
 
 module.exports = router;
 

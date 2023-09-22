@@ -200,18 +200,17 @@ async function addToCart(req: any, res: any) {
   // if product is not in cart
   if (!(newProduct.length > 0)) {
     // add new cartItem to cartItems in Cart
-    var totalQty = quantity + newProduct[0].quantity;
 
     const newCartItem = await prisma.cartItem.create({
-      where: { cartItemId },
       data: {
+        quantity,
         productId,
-        quantity: totalQty,
+        cartId,
       },
     });
 
-    const updateCart = await prisma.cart.update({
-      where: { cartId },
+    const updatedCart = await prisma.cart.update({
+      where: { id: cartId },
       data: {
         cartItem: {
           connect: {
@@ -227,13 +226,33 @@ async function addToCart(req: any, res: any) {
   }
 
   // if product already in cart
-  const newCartItem = await prisma.cartItem.update({
-    where: { cartItemId },
+
+  // check if cartItemId and productId in the same cartItem
+  const check = await checkCartItem(cartItemId, productId);
+  if (!(check.length > 0)) {
+    return res
+      .status(400)
+      .json({ message: "ERROR! cartItemId or productId is wrong" });
+  }
+  const totalQty = quantity + newProduct[0].quantity;
+
+  const updateCartItem = await prisma.cartItem.update({
+    where: { id: cartItemId },
     data: {
       productId,
       quantity: totalQty,
     },
   });
+
+  if (!updateCartItem) {
+    return res
+      .status(400)
+      .json({ message: "Cart not succefully updated, database ERROR!" });
+  }
+
+  res
+    .status(200)
+    .json({ message: "Cart item succefully updated", data: updateCartItem });
 }
 
 module.exports = {
@@ -242,6 +261,7 @@ module.exports = {
   updateCart,
   emptyCart,
   getCartById,
+  addToCart,
 };
 
 export {};

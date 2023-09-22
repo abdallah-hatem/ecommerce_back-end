@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // url      = env("DATABASE_URL") //local
+  url      = env("POSTGRES_PRISMA_URL") //vercel
 }
 
 model User {
@@ -14,7 +15,6 @@ model User {
   password String
 
   cart Cart[]
-  // CartItem CartItem[]
 }
 
 model Product {
@@ -24,8 +24,8 @@ model Product {
   desc     String
   quantity Int
 
-  Category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+  Category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
 
   // Cart     Cart[]
   CartItem CartItem[]
@@ -39,13 +39,13 @@ model Category {
 }
 
 model CartItem {
-  id        Int     @id @default(autoincrement())
+  id       Int @id @default(autoincrement())
+  quantity Int
+
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
-  quantity  Int
-
-  Cart   Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  cartId Int
+  Cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId    Int
 }
 
 model Cart {
