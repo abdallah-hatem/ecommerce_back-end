@@ -189,6 +189,53 @@ async function emptyCart(req: any, res: any) {
   }
 }
 
+async function addToCart(req: any, res: any) {
+  const cartId = Number(req.params.id);
+
+  const { productId, quantity, cartItemId } = req.body;
+
+  // check cartItems contains productId
+  const newProduct = await isProductFoundInCart(cartId, productId);
+
+  // if product is not in cart
+  if (!(newProduct.length > 0)) {
+    // add new cartItem to cartItems in Cart
+    var totalQty = quantity + newProduct[0].quantity;
+
+    const newCartItem = await prisma.cartItem.create({
+      where: { cartItemId },
+      data: {
+        productId,
+        quantity: totalQty,
+      },
+    });
+
+    const updateCart = await prisma.cart.update({
+      where: { cartId },
+      data: {
+        cartItem: {
+          connect: {
+            id: newCartItem.id,
+          },
+        },
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Cart item succefully added", data: newCartItem });
+  }
+
+  // if product already in cart
+  const newCartItem = await prisma.cartItem.update({
+    where: { cartItemId },
+    data: {
+      productId,
+      quantity: totalQty,
+    },
+  });
+}
+
 module.exports = {
   getAllCarts,
   createCart,
