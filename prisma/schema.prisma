@@ -27,8 +27,8 @@ model Product {
   Category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
 
-  // Cart     Cart[]
-  CartItem CartItem[]
+  CartItem     CartItem[]
+  SizeToColors SizeToColors[]
 }
 
 model Category {
@@ -42,10 +42,17 @@ model CartItem {
   id       Int @id @default(autoincrement())
   quantity Int
 
+  size    Sizes @relation(fields: [sizesId], references: [id])
+  sizesId Int
+
+  color    Colors @relation(fields: [colorsId], references: [id])
+  colorsId Int
+
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
-  Cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  cartId    Int
+
+  Cart   Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId Int
 }
 
 model Cart {
@@ -54,4 +61,32 @@ model Cart {
   userId Int
 
   cartItem CartItem[]
+}
+
+model Colors {
+  id   Int    @id @default(autoincrement())
+  name String
+  hex  String
+
+  SizeToColors SizeToColors[]
+  CartItem     CartItem[]
+}
+
+model Sizes {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  SizeToColors SizeToColors[]
+  CartItem     CartItem[]
+}
+
+model SizeToColors {
+  id        Int     @id @default(autoincrement())
+  porduct   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  size   Sizes @relation(fields: [sizeId], references: [id])
+  sizeId Int
+
+  colors Colors[]
 }

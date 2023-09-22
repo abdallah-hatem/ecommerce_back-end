@@ -182,6 +182,8 @@ router
 
 router.route("/user").get(checkAuth, checkAdmin, getAllUsers);
 
+router.route("/user/cookie").get(checkAuth, getCookie);
+
 module.exports = router;
 
 export {};

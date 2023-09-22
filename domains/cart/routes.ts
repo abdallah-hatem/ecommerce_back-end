@@ -9,7 +9,7 @@ const {
   createCart,
   updateCart,
   emptyCart,
-  getCartById,
+  getCartByUserId,
   addToCart,
 } = require("./controller");
 
@@ -20,10 +20,10 @@ router.route("/cart").get(checkAuth, checkAdmin, getAllCarts);
 
 router
   .route("/cart/:id")
-  .get(checkAuth, getCartById)
+  .get(checkAuth, getCartByUserId)
   .delete(checkAuth, emptyCart)
-  // .put(checkAuth, updateCart)
   .put(checkAuth, addToCart);
+// .put(checkAuth, updateCart)
 
 module.exports = router;
 

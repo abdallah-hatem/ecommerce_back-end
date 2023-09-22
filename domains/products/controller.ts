@@ -9,7 +9,9 @@ interface Product {
 // Get Products
 async function getAllProducts(req: any, res: any) {
   try {
-    const products = await prisma.product.findMany({});
+    const products = await prisma.product.findMany({
+      include: { SizeToColors: { include: { colors: true } } },
+    });
 
     if (!products) {
       return res.status(404).json({ message: "NO products found!" });
@@ -93,7 +95,7 @@ async function getProductsByCatId(req: any, res: any) {
 // Create a product
 async function createProduct(req: any, res: any) {
   try {
-    const { name, price, desc, categoryId, quantity } = req.body;
+    const { name, price, desc, categoryId, quantity, sizes } = req.body;
 
     if (price <= 0 || quantity <= 0) {
       return res.status(401).json({
@@ -103,7 +105,7 @@ async function createProduct(req: any, res: any) {
     }
 
     const newProduct: Product = await prisma.product.create({
-      data: { name, price, desc, categoryId, quantity },
+      data: { name, price, desc, categoryId, quantity, sizes },
     });
 
     if (!newProduct) {
@@ -168,6 +170,36 @@ async function updateProduct(req: any, res: any) {
   }
 }
 
+// Get Product sizes
+async function getProductSizes(req: any, res: any) {
+  // const { productId } = req.body;
+  const id = Number(req.params.id);
+
+  try {
+    const productSizesIds = await prisma.SizeToColors.findMany({
+      // include: { SizeToColors: { include: { colors: true } } },
+      where: { productId: id },
+    });
+
+    const sizeIds = productSizesIds.map((el: any) => el.sizeId);
+
+    const productSizes = await prisma.sizes.findMany({
+      where: {
+        id: { in: sizeIds },
+      },
+    });
+
+    if (!productSizes) {
+      return res.status(404).json({ message: "NO productSizes found!" });
+    }
+
+    res.status(200).json({ productSizes });
+  } catch (error) {
+    res.send({ error });
+    console.log(error);
+  }
+}
+
 module.exports = {
   getAllProducts,
   createProduct,
@@ -176,5 +208,6 @@ module.exports = {
   getProductById,
   getProductsByCatId,
   getPaginatedProducts,
+  getProductSizes,
 };
 export {};

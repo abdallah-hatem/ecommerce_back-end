@@ -3,7 +3,7 @@ const {
   isCartAlreadyAvailable,
 } = require("../../lib/cart/isCartAlreadyAvailable");
 const { isProductFoundInCart } = require("../../lib/cart/isProductFoundInCart");
-const { checkCartItem } = require("../../lib/cart/checkCartItem");
+const { validateCartItem } = require("../../lib/cart/validateCartItem");
 
 interface Cart {
   name: String;
@@ -29,13 +29,13 @@ async function getAllCarts(req: any, res: any) {
 }
 
 // Get Cart by ID
-async function getCartById(req: any, res: any) {
+async function getCartByUserId(req: any, res: any) {
   try {
     const id = Number(req.params.id);
 
-    const cart = await prisma.cart.findUnique({
-      where: { id },
-      include: { products: true },
+    const cart = await prisma.cart.findMany({
+      where: { userId: id },
+      include: { cartItem: true },
     });
 
     if (!cart) {
@@ -98,7 +98,7 @@ async function updateCart(req: any, res: any) {
       const totalQty = quantity + newProduct[0].quantity;
 
       // check if cartItemId and productId in the same cartItem
-      const check = await checkCartItem(cartItemId, productId);
+      const check = await validateCartItem(cartItemId, productId);
       if (check.length > 0) {
         const newCartItem = await prisma.cartItem.update({
           where: { id: cartItemId },
@@ -189,6 +189,7 @@ async function emptyCart(req: any, res: any) {
   }
 }
 
+// Add to cart
 async function addToCart(req: any, res: any) {
   const cartId = Number(req.params.id);
 
@@ -227,8 +228,8 @@ async function addToCart(req: any, res: any) {
 
   // if product already in cart
 
-  // check if cartItemId and productId in the same cartItem
-  const check = await checkCartItem(cartItemId, productId);
+  // check if cartItemId and productId are in the same cartItem
+  const check = await validateCartItem(cartItemId, productId);
   if (!(check.length > 0)) {
     return res
       .status(400)
@@ -260,7 +261,7 @@ module.exports = {
   createCart,
   updateCart,
   emptyCart,
-  getCartById,
+  getCartByUserId,
   addToCart,
 };
 
