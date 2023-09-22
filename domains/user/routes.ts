@@ -182,7 +182,7 @@ router
 
 router.route("/user").get(checkAuth, checkAdmin, getAllUsers);
 
-router.route("/user/cookie").get(checkAuth, getCookie);
+router.route("/user/cookie").get(getCookie);
 
 module.exports = router;
 

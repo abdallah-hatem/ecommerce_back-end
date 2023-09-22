@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") //local
-  // url      = env("POSTGRES_PRISMA_URL") //vercel
+  // url      = env("DATABASE_URL") //local
+  url      = env("POSTGRES_PRISMA_URL") //vercel
 }
 
 model User {
