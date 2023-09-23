@@ -1,9 +1,9 @@
+const { isProductFoundInCart } = require("../../lib/cart/isProductFoundInCart");
+const { validateCartItem } = require("../../lib/cart/validateCartItem");
 const { prisma } = require("../../config/prisma");
 const {
   isCartAlreadyAvailable,
 } = require("../../lib/cart/isCartAlreadyAvailable");
-const { isProductFoundInCart } = require("../../lib/cart/isProductFoundInCart");
-const { validateCartItem } = require("../../lib/cart/validateCartItem");
 
 interface Cart {
   name: String;
@@ -193,7 +193,7 @@ async function emptyCart(req: any, res: any) {
 async function addToCart(req: any, res: any) {
   const cartId = Number(req.params.id);
 
-  const { productId, quantity, cartItemId } = req.body;
+  const { productId, quantity, cartItemId, sizesId, colorsId } = req.body;
 
   // check cartItems contains productId
   const newProduct = await isProductFoundInCart(cartId, productId);
@@ -204,8 +204,10 @@ async function addToCart(req: any, res: any) {
 
     const newCartItem = await prisma.cartItem.create({
       data: {
-        quantity,
         productId,
+        quantity,
+        sizesId,
+        colorsId,
         cartId,
       },
     });

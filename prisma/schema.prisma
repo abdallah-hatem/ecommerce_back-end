@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   // url      = env("DATABASE_URL") //local
-  url      = env("POSTGRES_PRISMA_URL") //vercel
+  url      = env("PSTGRS_PRISMA_URL") //vercel
 }
 
 model User {
@@ -42,10 +42,10 @@ model CartItem {
   id       Int @id @default(autoincrement())
   quantity Int
 
-  size    Sizes @relation(fields: [sizesId], references: [id])
+  size    Sizes @relation(fields: [sizesId], references: [id], onDelete: Cascade)
   sizesId Int
 
-  color    Colors @relation(fields: [colorsId], references: [id])
+  color    Colors @relation(fields: [colorsId], references: [id], onDelete: Cascade)
   colorsId Int
 
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)

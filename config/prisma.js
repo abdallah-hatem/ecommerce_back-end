@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 function dbUrl() {
   if (process.env.NODE_ENV === "production") {
     return {
-      url: process.env.POSTGRES_PRISMA_URL,
+      url: process.env.PSTGRS_PRISMA_URL,
     };
   }
 
