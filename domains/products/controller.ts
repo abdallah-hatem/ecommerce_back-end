@@ -1,3 +1,5 @@
+import { getProductSizes } from "../../lib/products/getProductSizes";
+
 const { prisma } = require("../../config/prisma");
 
 interface Product {
@@ -65,7 +67,11 @@ async function getProductById(req: any, res: any) {
       return res.status(404).json({ message: "NO product found!" });
     }
 
-    res.status(200).json({ product });
+    const productSizes = await getProductSizes(productId);
+
+    const finalProduct = { ...product, sizes: productSizes };
+
+    res.status(200).json({ product: finalProduct });
   } catch (error) {
     res.send({ error });
     console.log(error);
@@ -170,36 +176,6 @@ async function updateProduct(req: any, res: any) {
   }
 }
 
-// Get Product sizes
-async function getProductSizes(req: any, res: any) {
-  // const { productId } = req.body;
-  const id = Number(req.params.id);
-
-  try {
-    const productSizesIds = await prisma.SizeToColors.findMany({
-      // include: { SizeToColors: { include: { colors: true } } },
-      where: { productId: id },
-    });
-
-    const sizeIds = productSizesIds.map((el: any) => el.sizeId);
-
-    const productSizes = await prisma.sizes.findMany({
-      where: {
-        id: { in: sizeIds },
-      },
-    });
-
-    if (!productSizes) {
-      return res.status(404).json({ message: "NO productSizes found!" });
-    }
-
-    res.status(200).json({ productSizes });
-  } catch (error) {
-    res.send({ error });
-    console.log(error);
-  }
-}
-
 module.exports = {
   getAllProducts,
   createProduct,
@@ -208,6 +184,5 @@ module.exports = {
   getProductById,
   getProductsByCatId,
   getPaginatedProducts,
-  getProductSizes,
 };
 export {};

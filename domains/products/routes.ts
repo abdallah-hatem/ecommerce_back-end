@@ -116,7 +116,6 @@ const {
   getProductById,
   getProductsByCatId,
   getPaginatedProducts,
-  getProductSizes
 } = require("./controller");
 
 const router = express.Router();
@@ -131,8 +130,6 @@ router
   .get(checkAuth, getProductById)
   .delete(checkAuth, checkAdmin, deleteProduct)
   .put(checkAuth, checkAdmin, updateProduct);
-
-router.route("/product/sizes/:id").get(checkAuth, getProductSizes);
 
 router.route("/products/category/:id").get(checkAuth, getProductsByCatId);
 
