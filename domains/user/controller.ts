@@ -89,7 +89,7 @@ async function login(req: any, res: any) {
     });
 
     res.cookie("jwt", token, {
-      expires: maxAge,
+      expires: new Date(Date.now() + maxAge * 10),
       httpOnly: false,
       sameSite: "none",
       secure: true,
