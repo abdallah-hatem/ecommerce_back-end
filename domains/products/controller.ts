@@ -12,7 +12,12 @@ interface Product {
 async function getAllProducts(req: any, res: any) {
   try {
     const products = await prisma.product.findMany({
-      include: { SizeToColors: { include: { colors: true } } },
+      include: {
+        SizeToColors: {
+          include: { colors: true, size: true },
+        },
+        Category: { include: true },
+      },
     });
 
     if (!products) {
