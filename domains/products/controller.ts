@@ -1,4 +1,6 @@
 import { getProductSizes } from "../../lib/products/getProductSizes";
+import { getProductQty } from "../../lib/products/getProductQty";
+import { getProductColors } from "../../lib/products/getProductColors";
 
 const { prisma } = require("../../config/prisma");
 
@@ -13,10 +15,11 @@ async function getAllProducts(req: any, res: any) {
   try {
     const products = await prisma.product.findMany({
       include: {
+        Category: true,
+        QtySizeColor: { include: { size: true, color: true } },
         SizeToColors: {
           include: { colors: true, size: true },
         },
-        Category: { include: true },
       },
     });
 
@@ -35,7 +38,7 @@ async function getAllProducts(req: any, res: any) {
 async function getPaginatedProducts(req: any, res: any) {
   try {
     const page = Number(req.params.id);
-    const items = 10;
+    const { items } = req.body;
 
     function skips(page: number) {
       if (page === 1) return 0;
@@ -66,15 +69,21 @@ async function getProductById(req: any, res: any) {
 
     const product = await prisma.product.findUnique({
       where: { id: productId },
+      include: {
+        Category: { include: true },
+        QtySizeColor: { include: { size: true, color: true } },
+      },
     });
 
     if (!product) {
       return res.status(404).json({ message: "NO product found!" });
     }
 
-    const productSizes = await getProductSizes(productId);
+    const quantity = await getProductQty(productId);
+    const sizes = await getProductSizes(productId);
+    const colors = await getProductColors(productId);
 
-    const finalProduct = { ...product, sizes: productSizes };
+    const finalProduct = { ...product, quantity, sizes, colors };
 
     res.status(200).json({ product: finalProduct });
   } catch (error) {
@@ -106,17 +115,18 @@ async function getProductsByCatId(req: any, res: any) {
 // Create a product
 async function createProduct(req: any, res: any) {
   try {
-    const { name, price, desc, categoryId, quantity, sizes } = req.body;
+    const { name, desc } = req.body;
+    const price = Number(req.body.price);
+    const categoryId = Number(req.body.categoryId);
 
-    if (price <= 0 || quantity <= 0) {
+    if (price <= 0) {
       return res.status(401).json({
-        message:
-          "ERROR! price or quantity can not be smaller than or equal Zero",
+        message: "ERROR! price can not be smaller than or equal Zero",
       });
     }
 
     const newProduct: Product = await prisma.product.create({
-      data: { name, price, desc, categoryId, quantity, sizes },
+      data: { name, price, desc, categoryId },
     });
 
     if (!newProduct) {

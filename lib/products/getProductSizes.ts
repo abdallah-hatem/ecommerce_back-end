@@ -1,20 +1,18 @@
 const { prisma } = require("../../config/prisma");
 
 export async function getProductSizes(productId: number) {
-  const productSizesIds = await prisma.sizeToColors.findMany({
+  const productSizesIds = await prisma.QtySizeColor.findMany({
     where: { productId },
   });
 
-  if (!productSizesIds) {
-    console.log("Error! in getProductSizes()");
-    return false;
-  }
+  let sizesIds: any = [];
 
-  const sizeIds = productSizesIds.map((el: any) => el.sizeId);
-
+  const data = productSizesIds.forEach((el: any) => {
+    !sizesIds.includes(el.sizesId) && sizesIds.push(el.sizesId);
+  });
   const productSizes = await prisma.sizes.findMany({
     where: {
-      id: { in: sizeIds },
+      id: { in: sizesIds },
     },
   });
 

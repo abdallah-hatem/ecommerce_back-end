@@ -8,7 +8,12 @@ const { prisma } = require("../../config/prisma");
 async function getAllSizesToColors(req: any, res: any) {
   try {
     const sizeToColors = await prisma.sizeToColors.findMany({
-      include: { colors: true },
+      include: {
+        // colors: true,
+        QtySizeColor: {
+          include: { sizeToColor: { include: { size: true, colors: true } } },
+        },
+      },
     });
 
     if (!sizeToColors) {

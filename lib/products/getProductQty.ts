@@ -5,9 +5,15 @@ export async function getProductQty(id: number) {
     where: {
       id,
     },
+
+    include: { QtySizeColor: true },
   });
 
-  const { quantity } = product;
+  let sum = 0;
 
-  return quantity;
+  const quantity = product.QtySizeColor.forEach(
+    (el: any) => (sum += el.quantity)
+  );
+
+  return sum;
 }
