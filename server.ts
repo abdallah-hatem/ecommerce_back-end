@@ -16,7 +16,7 @@ let whitelist = [
   "http://localhost:3000",
   "https://frontend-for-testing-backend.vercel.app",
   "https://e-commerce-site-git-walid-new-design-34an7oda-gmailcom.vercel.app",
-  "https://admin-panel-next-js-delta.vercel.app/",
+  "https://admin-panel-next-js-delta.vercel.app",
 ];
 
 app.use(
