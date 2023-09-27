@@ -28,7 +28,7 @@ app.use(
     //     callback(new Error("Not allowed by CORS"));
     //   }
     // },
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://127.0.0.0:3000"],
 
     allowedHeaders: [
       "Origin",
