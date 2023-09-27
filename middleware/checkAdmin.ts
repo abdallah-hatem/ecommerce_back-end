@@ -21,4 +21,5 @@ export default async function checkAdmin(req: any, res: any, next: any) {
   //   }
   //   return res.status(401).json({ message: "Not authorized, must be Admin" });
   // }
+  return next();
 }

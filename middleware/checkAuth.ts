@@ -16,4 +16,5 @@ export default function checkAuth(req: any, res: any, next: any) {
   // } catch (error) {
   //   console.log(error);
   // }
+  return next();
 }

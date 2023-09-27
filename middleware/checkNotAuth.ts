@@ -6,4 +6,5 @@ export default function checkNotAuth(req: any, res: any, next: any) {
   //   return next();
   // }
   // return res.status(401).json({ message: "Already logged in" });
+  return next();
 }
