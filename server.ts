@@ -28,6 +28,14 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "X-Access-Token",
+      "Authorization",
+    ],
 
     sameSite: "none",
     credentials: true,
