@@ -4,7 +4,6 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const routes = require("./routes");
 require("dotenv").config();
-var proxy = require("express-http-proxy");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
@@ -43,8 +42,6 @@ app.use(
     secure: true,
   })
 );
-
-app.use("/", proxy({ target: "http://localhost:3000", changeOrigin: true }));
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
