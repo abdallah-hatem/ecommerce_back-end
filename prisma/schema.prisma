@@ -99,12 +99,12 @@ model QtySizeColor {
 
   quantity Int
 
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 
-  size    Sizes @relation(fields: [sizesId], references: [id])
+  size    Sizes @relation(fields: [sizesId], references: [id], onDelete: Cascade)
   sizesId Int
 
-  color    Colors @relation(fields: [colorsId], references: [id])
+  color    Colors @relation(fields: [colorsId], references: [id], onDelete: Cascade)
   colorsId Int
 }

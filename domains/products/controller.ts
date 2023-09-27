@@ -117,21 +117,40 @@ async function createProduct(req: any, res: any) {
   try {
     const { name, desc } = req.body;
     const price = Number(req.body.price);
+    const quantity = Number(req.body.quantity);
     const categoryId = Number(req.body.categoryId);
+    const sizesId = Number(req.body.sizeId);
+    const colorIds = req.body.colorIds.map((el: any) => Number(el));
 
-    if (price <= 0) {
+    if (price <= 0 || quantity <= 0) {
       return res.status(401).json({
         message: "ERROR! price can not be smaller than or equal Zero",
       });
     }
 
-    const newProduct: Product = await prisma.product.create({
+    const newProduct = await prisma.product.create({
       data: { name, price, desc, categoryId },
     });
 
+    console.log(newProduct, "newProduct");
+
+    const createMnay = colorIds.map(
+      async (el: any) =>
+        await prisma.QtySizeColor.create({
+          data: {
+            productId: newProduct.id,
+            colorsId: el,
+            sizesId,
+            quantity,
+          },
+        })
+    );
+
+    console.log(await createMnay, "createMany");
+
     if (!newProduct) {
       return res
-        .status(401)
+        .status(400)
         .json({ message: "Product not successful created database ERROR!" });
     }
 
